@@ -1,0 +1,4 @@
+echo "We set up a shortcut to the odoo-bin file, so you can type just 'odoo-bin' instead of 'python /odoo/odoo-bin'"
+echo "Type 'make start-odoo' to start the odoo server"
+alias odoo-bin='python /odoo/odoo-bin'
+

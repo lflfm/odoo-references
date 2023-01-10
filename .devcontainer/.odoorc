@@ -1,0 +1,17 @@
+[options]
+addons_path=/odoo/enterprise-modules,/odoo/addons,/workspaces
+http_port=4200
+db_user=odoopostgres
+db_name=odoopostgres
+db_password=odoopostgres
+db_host=db
+db_port=5432
+admin_passwd=admin
+dbfilter=
+list_db=True
+log_handler=:INFO
+log_level=info
+logfile=
+screencasts=
+screenshots=/tmp/odoo_tests
+csv_internal_sep=,
