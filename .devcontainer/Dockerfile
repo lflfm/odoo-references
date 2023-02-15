@@ -40,6 +40,9 @@ RUN ln -s /workspaces/.devcontainer/.vimrc /root/.vimrc
 RUN ln -s /workspaces/.devcontainer/.vimrc /home/vscode/.vimrc
 RUN ln -s /workspaces/.devcontainer/.aliases /home/vscode/.aliases
 COPY .devcontainer/bash_completion.d /etc/bash_completion.d
+RUN find /etc/bash_completion.d -type f -exec dos2unix {} 2>/dev/null \; || true
+RUN chmod ug+x /etc/bash_completion.d/**.sh
+
 RUN echo "for f in /etc/bash_completion.d/*; do source \$f; done" >> /home/vscode/.bashrc
 RUN echo ". ~/.aliases" >> /home/vscode/.bashrc
 RUN echo "export ODOOVERSION=$ODOOVERSION" >> /home/vscode/.bashrc

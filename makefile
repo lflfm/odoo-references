@@ -14,18 +14,25 @@ list:
 start-odoo:
 	python /odoo/odoo-bin --dev all
 
-start-odoo-with-tests:
-	@echo "*--------------------------------------------------------------*"
-	@echo "| This will take a LONG time as it will run ALL tests in Odoo  |"
-	@echo "| You should only really run this very rarely,                 |"
-	@echo "| in very specific scenarios                                   |"
-	@echo "| press ctrl+c to abort at any time                            |"
-	@echo "*--------------------------------------------------------------*"
-	@sleep 7s
-	python /odoo/odoo-bin --dev all --test-enable
+# ex. make test module=rising_api_connector
+test:
+	@if [ -z "${module}" ]; then echo "Please specify a module to test (eg. make test module=rising_assets_management)"; exit 1; fi
+	@echo Testing module ${module}
+	python /odoo/odoo-bin -i ${module} -u ${module} --dev all --test-tags '/${module}' --stop-after-init
 
-test-library-app:
-	python /odoo/odoo-bin -i library_app -u library_app --dev all --test-tags '/library_app' --stop-after-init
+# Most of the time you just want to run and re-run the tests, use the test command above
+# But sometimes, you should make sure you run on a clean DB, to help validate your dependencies and test data
+# Of course, you must be careful to only run this in your local dev container, since it deletes the DB!
+# ex. make test-clean module=rising_api_connector
+test-clean:
+	@echo "*--------------------------------------------------------------*"
+	@echo "| WARNING: The local Odoo db will be DELETED and recreated     |"
+	@echo "*--------------------------------------------------------------*"
+	@sleep 5s
+	@if [ -z "${module}" ]; then echo "Please specify a module to test (eg. make test module=rising_assets_management)"; exit 1; fi
+	@echo Re-creating the DB, then testing module ${module}
+	make delete-and-reinstall-odoo-db
+	make test
 
 test-all-our-modules:
 	@echo "This will test all modules in the /workspace folder"
@@ -63,8 +70,7 @@ delete-odoo-db:
 
 delete-and-reinstall-odoo-db:
 	@echo "*--------------------------------------------------------------*"
-	@echo "| WARNING: The local Odoo db will be DELETED                   |"
-	@echo "| You may run 'make install-odoo-db' after this for a clean db |"
+	@echo "| WARNING: The local Odoo db will be DELETED and recreated     |"
 	@echo "*--------------------------------------------------------------*"
 	@sleep 5s
 	@.devcontainer/deleteOdooDatabase.sh

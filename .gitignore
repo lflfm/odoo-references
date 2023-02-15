@@ -3,6 +3,9 @@ _build/
 
 # dotfiles
 .*
+!.vscode/
+.vscode/*
+!.vscode/settings.json
 !.devcontainer/
 !.devcontainer/*
 !.enterprise/

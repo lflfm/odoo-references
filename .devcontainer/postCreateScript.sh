@@ -5,6 +5,10 @@ git config --global core.fileMode false
 #git config --global commit.gpgsign true
 sudo chown -R $USER:$USER /workspaces
 
+dos2unix .devcontainer/postStartScript.sh
+sudo chmod ug+x /workspaces/.devcontainer/**.sh
+.devcontainer/postStartScript.sh
+
 ~/installPostgressClient.sh
 
 make install-odoo-db

@@ -10,69 +10,82 @@
 		"ghcr.io/devcontainers/features/docker-from-docker:1": {},
 		"ghcr.io/devcontainers/features/git:1": {}
 	},
-	"settings": {
-		"editor.formatOnPaste": false,
-		"editor.formatOnSave": true,
-		/*
-		 * Don't use the value "modificationsIfAvailable" for now, because there is a bug in the extension prettier that
-		 * causes the prettier to add unnecessary semicolons, see https://github.com/prettier/prettier/issues/12964
-		 */
-		"editor.formatOnSaveMode": "file",
-		"editor.codeActionsOnSave": {
-			//These settings shouldn't be enabled. It will cause all auto fixes to be applied automatically. The developer
-			//should have the option to decide which auto fix to apply. This option is also very slow and causes every
-			//save action to take up to one minute for one file.
-			"source.fixAll": false,
-			"source.organizeImports": true
-		},
-		"files.autoSave": "onFocusChange",
-    "python.linting.pylintArgs": [
-			"--init-hook",
-			"import sys; sys.path.insert(0, '/odoo'); sys.path.insert(0, '/home/vscode/.local/lib/python3.10/site-packages')",
-			"--disable=C0114",
-			"--disable=C0115",
-			"--disable=C0116"
-		],
-		"python.analysis.extraPaths": [
-			"/odoo",
-			"/home/vscode/.local/lib/python3.10/site-packages"
-		],
-		"python.autoComplete.extraPaths": [
-			"/odoo",
-			"/home/vscode/.local/lib/python3.10/site-packages"
-		],
-		"python.formatting.autopep8Args": [
-			"--max-line-length=120"
-		],
-		"python.formatting.blackArgs": [
-			"--line-length=120"
-		],
-		"python.formatting.yapfArgs": [
-			"--style={based_on_style: google, column_limit: 120, indent_width: 4}"
-		]
+	"customizations":{
+		"vscode":{
+			"settings": {
+				"editor.formatOnPaste": false,
+				"editor.formatOnSave": true,
+				/*
+				* Don't use the value "modificationsIfAvailable" for now, because there is a bug in the extension prettier that
+				* causes the prettier to add unnecessary semicolons, see https://github.com/prettier/prettier/issues/12964
+				*/
+				"editor.formatOnSaveMode": "file",
+				"editor.codeActionsOnSave": {
+					//These settings shouldn't be enabled. It will cause all auto fixes to be applied automatically. The developer
+					//should have the option to decide which auto fix to apply. This option is also very slow and causes every
+					//save action to take up to one minute for one file.
+					"source.fixAll": false,
+					"source.organizeImports": true
+				},
+				"files.autoSave": "onFocusChange",
+				"python.linting.pylintArgs": [
+					"--init-hook",
+					"import sys; sys.path.insert(0, '/odoo'); sys.path.insert(0, '/home/vscode/.local/lib/python3.10/site-packages')",
+					"--disable=C0114",
+					"--disable=C0115",
+					"--disable=C0116"
+				],
+				"python.analysis.extraPaths": [
+					"/odoo",
+					"/home/vscode/.local/lib/python3.10/site-packages"
+				],
+				"python.autoComplete.extraPaths": [
+					"/odoo",
+					"/home/vscode/.local/lib/python3.10/site-packages"
+				],
+				"python.formatting.autopep8Args": [
+					"--max-line-length=120"
+				],
+				"python.formatting.blackArgs": [
+					"--line-length=120"
+				],
+				"python.formatting.yapfArgs": [
+					"--style={based_on_style: google, column_limit: 120, indent_width: 4}"
+				],
+				"scm.defaultViewMode": "tree"
+			},
+			"extensions": [
+				"ms-vscode-remote.remote-containers",
+				//python
+				"ms-python.python",
+				"njpwerner.autodocstring",
+				"KevinRose.vsc-python-indent",
+				"ms-python.vscode-pylance",
+				"ms-python.isort",
+				//Path Intellisense
+				"christian-kohler.path-intellisense",
+				//Git
+				"donjayamanne.githistory",
+				"eamodio.gitlens",
+				"mhutchie.git-graph",
+				"letmaik.git-tree-compare",
+				"esbenp.prettier-vscode",
+				//Liveshare
+				"ms-vsliveshare.vsliveshare",
+				// code helpers
+				"VisualStudioExptTeam.vscodeintellicode",
+				"GitHub.copilot",
+				"GrapeCity.gc-excelviewer",
+				// XML
+				"redhat.vscode-xml"
+			]
+			// unfortunately, the excel viewer is not a good choice for the source control diff view
+			// setting it as default makes it the only way to see the diff view
+			// "workbench.editorAssociations": {
+			// 	"*.csv": "gc-excelviewer-csv-editor"
+			// }
+		}
 	},
-	"extensions": [
-		"ms-vscode-remote.remote-containers",
-		//python
-		"ms-python.python",
-		"njpwerner.autodocstring",
-		"KevinRose.vsc-python-indent",
-		"ms-python.vscode-pylance",
-		"ms-python.isort",
-		//Path Intellisense
-		"christian-kohler.path-intellisense",
-		//Git
-		"donjayamanne.githistory",
-		"eamodio.gitlens",
-		"mhutchie.git-graph",
-		"letmaik.git-tree-compare",
-		"esbenp.prettier-vscode",
-		//Liveshare
-		"ms-vsliveshare.vsliveshare",
-		// code helpers
-		"VisualStudioExptTeam.vscodeintellicode",
-		"GitHub.copilot"
-	],
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// ,"features": {}
@@ -83,8 +96,8 @@
 
 	// Use 'postCreateCommand' to run commands after the container is created.
 	// "postCreateCommand": "pip install --user -r requirements.txt",
-	"postCreateCommand": "/home/vscode/postCreateScript.sh",
-	"postStartCommand": "/home/vscode/postStartScript.sh"
+	"postCreateCommand": "dos2unix /home/vscode/postCreateScript.sh && sudo chmod ug+x /home/vscode/postCreateScript.sh && /home/vscode/postCreateScript.sh",
+	"postStartCommand": "dos2unix /home/vscode/postStartScript.sh && sudo chmod ug+x /home/vscode/postStartScript.sh && /home/vscode/postStartScript.sh"
 
 	// Configure tool-specific properties.
 	// ,"customizations": {}
